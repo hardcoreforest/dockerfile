@@ -11,6 +11,6 @@ mkdir -p /root/.ssh && chown root.root /root \
         && touch /root/.ssh/authorized_keys \
         && chmod 600 /root/.ssh/authorized_keys \
         && mkdir -p /var/run/sshd \
-        && sed  -i "/^[^#]*PermitRootLogin/ s/.*/#&/"  /etc/ssh/sshd_config && echo "PermitRootLogin yes" >> /etc/ssh/sshd_config \
+        && sed  -i "/^[^#]*PermitRootLogin/ s/.*/#&/"  /etc/ssh/sshd_config && echo "PermitRootLogin yes" >> /etc/ssh/sshd_config
 echo "root:${SSH_PW}" | chpasswd
 apt-get clean -y

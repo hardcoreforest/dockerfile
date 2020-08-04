@@ -5,7 +5,7 @@ set -e
 echo "Install SSH components"
 apt-get update
 
-apt-get install -y language-pack-zh-hant language-pack-zh-hans ttf-wqy-zenhei xfonts-wqy
+apt-get install -y language-pack-zh-hant language-pack-zh-hans ttf-wqy-zenhei xfonts-wqy apt-utils
 echo 'LANG="zh_CN.UTF-8"' >> /etc/environment
 echo 'LANGUAGE="zh_CN:zh:en_US:en"' >> /etc/environment
 dpkg-reconfigure locales

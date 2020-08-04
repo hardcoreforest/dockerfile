@@ -57,11 +57,10 @@ EXPOSE $SSH_PORT
 ADD ./src/common/xfce/ $HOME/
 
 ### configure startup
-DD ./src/common/scripts $STARTUPDIR
+ADD ./src/common/scripts $STARTUPDIR
 RUN $INST_SCRIPTS/set_user_permission.sh $STARTUPDIR $HOME $MY_INIT
 
 ENTRYPOINT ["/dockerstartup/vnc_startup.sh"]
-CMD ["--wait"]
 
 
 
