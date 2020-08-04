@@ -52,7 +52,7 @@ ENV LANG='zh_CN.utf8' LANGUAGE='zh_CN.utf8' LC_ALL='zh_CN.utf8'
 RUN $INST_SCRIPTS/chinese_input.sh
 
 ### install sshd
-ENV SSH_PW=sshpassoword SSH_PORT=22
+ENV SSH_PW=sshpassword SSH_PORT=22
 RUN $INST_SCRIPTS/sshd.sh
 EXPOSE $SSH_PORT
 
