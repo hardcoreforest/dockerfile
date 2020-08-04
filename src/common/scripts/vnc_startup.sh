@@ -105,4 +105,5 @@ if [[ $DEBUG == true ]] || [[ $1 =~ -t|--tail-log ]]; then
 fi
 
 . /etc/profile
+echo "root:${SSH_PW}" | chpasswd
 /usr/bin/supervisord -n

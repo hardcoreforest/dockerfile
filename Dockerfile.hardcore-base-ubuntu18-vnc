@@ -41,8 +41,11 @@ RUN find $INST_SCRIPTS -name '*.sh' -exec chmod a+x {} +
 
 ### Install some common tools
 
+
 ### Install Chinese fonts
+RUN $INST_SCRIPTS/common_ins.sh
 RUN $INST_SCRIPTS/chinese_fonts.sh
+RUN $INST_SCRIPTS/chinese_input.sh
 ENV LANG='zh_CN.utf8' LANGUAGE='zh_CN.utf8' LC_ALL='zh_CN.utf8'
 
 ### Install Chinese input
