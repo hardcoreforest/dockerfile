@@ -1,0 +1,70 @@
+FROM hcforest/ubuntu18-xfce-vnc:latest
+MAINTAINER HardCoreForest "it_hardcoreforest@126.com"
+ENV REFRESHED_AT 2020
+
+## Connection ports for controlling the UI:
+# VNC port:5900
+# noVNC webport, connect via http://IP:6900/?password=vncpassword
+# ENV DISPLAY=:0 \
+#    NO_VNC_PORT=6900 \
+#    VNC_PORT=5900 \
+#    VNC_COL_DEPTH=24 \
+#    VNC_RESOLUTION=1440x900 \
+#    VNC_PW=vncpassword \
+#    VNC_VIEW_ONLY=false \
+# EXPOSE $VNC_PORT $NO_VNC_PORT
+ENV VNC_RESOLUTION=1440x900
+
+### Envrionment config
+# ENV HOME=/headless \
+#    TERM=xterm \
+#    STARTUPDIR=/dockerstartup \
+#    INST_SCRIPTS=/headless/install \
+#    NO_VNC_HOME=/headless/noVNC \
+#    DEBIAN_FRONTEND=noninteractive \
+# WORKDIR $HOME
+
+
+### install Default Config & Init Script
+ENV MY_CONFIGS=$HOME/configs SUP_CONFIGS=$HOME/supervisor MY_INIT=$HOME/init
+ADD ./src/common/configs $MY_CONFIGS
+ADD ./src/common/supervisor $SUP_CONFIGS
+ADD ./src/common/init $MY_INIT
+RUN cp $SUP_CONFIGS/sshd.conf /etc/supervisor/conf.d/sshd.conf
+RUN find $MY_INIT -name '*.sh' -exec chmod a+x {} +
+RUN $MY_INIT/chrome-init.sh
+
+### Add all install scripts for further steps
+ADD ./src/common/install/ $INST_SCRIPTS/
+ADD ./src/ubuntu/install/ $INST_SCRIPTS/
+RUN find $INST_SCRIPTS -name '*.sh' -exec chmod a+x {} +
+
+### Install some common tools
+
+### Install Chinese fonts
+RUN $INST_SCRIPTS/chinese_fonts.sh
+ENV LANG='zh_CN.utf8' LANGUAGE='zh_CN.utf8' LC_ALL='zh_CN.utf8'
+
+### Install Chinese input
+RUN $INST_SCRIPTS/chinese_input.sh
+
+### install sshd
+ENV SSH_PW=sshpassoword SSH_PORT=22
+RUN $INST_SCRIPTS/sshd.sh
+EXPOSE $SSH_PORT
+
+### Install xfce UI
+ADD ./src/common/xfce/ $HOME/
+
+### configure startup
+DD ./src/common/scripts $STARTUPDIR
+RUN $INST_SCRIPTS/set_user_permission.sh $STARTUPDIR $HOME $MY_INIT
+
+ENTRYPOINT ["/dockerstartup/vnc_startup.sh"]
+CMD ["--wait"]
+
+
+
+
+
+
